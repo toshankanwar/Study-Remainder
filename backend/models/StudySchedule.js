@@ -1,4 +1,3 @@
-// backend/models/StudySchedule.js
 const mongoose = require('mongoose');
 
 const studyScheduleSchema = new mongoose.Schema({
