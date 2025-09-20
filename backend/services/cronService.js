@@ -1,4 +1,3 @@
-// backend/services/cronService.js
 const cron = require('node-cron');
 const StudySchedule = require('../models/StudySchedule');
 const User = require('../models/User');
