@@ -1,4 +1,3 @@
-// backend/controllers/studyController.js
 const { validationResult } = require('express-validator');
 const StudySchedule = require('../models/StudySchedule');
 const { sendSuccessResponse, sendErrorResponse } = require('../utils/responseHandler');
