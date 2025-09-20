@@ -1,4 +1,3 @@
-// backend/utils/responseHandler.js
 const sendSuccessResponse = (res, message, data = null, statusCode = 200) => {
   return res.status(statusCode).json({
     success: true,
