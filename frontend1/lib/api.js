@@ -46,10 +46,10 @@ export const authAPI = {
 export const studyAPI = {
   create: (data) => api.post('/study-schedules', data),
   getAll: (params) => api.get('/study-schedules', { params }),
-  getById: (id) => api.get(/study-schedules/${id}),
-  update: (id, data) => api.put(/study-schedules/${id}, data),
-  delete: (id) => api.delete(/study-schedules/${id}),
-  toggle: (id) => api.patch(/study-schedules/${id}/toggle),
+  getById: (id) => api.get(`/study-schedules/${id}`),
+  update: (id, data) => api.put(`/study-schedules/${id}`, data),
+  delete: (id) => api.delete(`/study-schedules/${id}`),
+  toggle: (id) => api.patch(`/study-schedules/${id}/toggle`),
 };
 
 export default api;
