@@ -35,7 +35,7 @@ app.use(limiter);
 
 // CORS configuration
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+  origin: process.env.FRONTEND_URL || 'https://quite-hours-scheduler-iota.vercel.app',
   credentials: true,
 }));
 
