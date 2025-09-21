@@ -1,4 +1,4 @@
-// lib/auth.ts
+// lib/auth.ts - Simplest fix
 export function isTokenExpired(token: string): boolean {
   try {
     const payload = JSON.parse(atob(token.split('.')[1]));
@@ -8,7 +8,7 @@ export function isTokenExpired(token: string): boolean {
   }
 }
 
-export function getTokenPayload(token: string){
+export function getTokenPayload(token: string): Record<string, unknown> | null {
   try {
     return JSON.parse(atob(token.split('.')[1]));
   } catch {
@@ -16,13 +16,15 @@ export function getTokenPayload(token: string){
   }
 }
 
-export function formatAuthError(error): string {
-  if (error.response?.data?.message) {
-    return error.response.data.message;
+export function formatAuthError(error: Record<string, unknown> | Error | unknown): string {
+  const err = error as { response?: { data?: { message?: string } }; message?: string };
+  
+  if (err.response?.data?.message) {
+    return err.response.data.message;
   }
   
-  if (error.message) {
-    return error.message;
+  if (err.message) {
+    return err.message;
   }
   
   return 'An unexpected error occurred';
