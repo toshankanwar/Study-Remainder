@@ -2,6 +2,7 @@ const cron = require('node-cron');
 const StudySchedule = require('../models/StudySchedule');
 const User = require('../models/User');
 const EmailService = require('./emailService');
+const { DateTime } = require('luxon'); // Add Luxon for timezone handling
 
 class CronService {
   constructor() {
@@ -10,25 +11,19 @@ class CronService {
 
   start() {
     console.log('🚀 Starting Study Reminder Cron Service...');
-    
-    // Test email connection first
+
     EmailService.testConnection();
 
-    // Run every minute to check for study reminders
+    // Every minute
     const reminderJob = cron.schedule('* * * * *', async () => {
       await this.checkAndSendReminders();
-    }, {
-      scheduled: true
-    });
-
+    }, { scheduled: true });
     this.jobs.set('studyReminder', reminderJob);
-    
-    // Cleanup old reminder records every day at midnight
+
+    // Daily cleanup at 00:00 IST
     const cleanupJob = cron.schedule('0 0 * * *', async () => {
       await this.cleanupOldReminders();
-    }, {
-      scheduled: true
-    });
+    }, { scheduled: true });
 
     this.jobs.set('cleanup', cleanupJob);
 
@@ -37,28 +32,27 @@ class CronService {
 
   async checkAndSendReminders() {
     try {
-      const now = new Date();
-      const currentDay = this.getCurrentDayName();
+      // ---- Use IST time everywhere ----
+      const now = DateTime.now().setZone('Asia/Kolkata');
+      const currentDay = this.getCurrentDayName(now);
       const currentTime = this.formatTime(now);
-      
-      // Calculate time 10 minutes from now
-      const tenMinutesLater = new Date(now.getTime() + 10 * 60 * 1000);
-      const reminderTime = this.formatTime(tenMinutesLater);
-      
-      console.log(`🔍 Checking for reminders at ${currentTime} for ${reminderTime} on ${currentDay}`);
 
-      // Find active schedules that need reminders
+      // Time 10 minutes from now in IST
+      const reminderTimeObj = now.plus({ minutes: 10 });
+      const reminderTime = this.formatTime(reminderTimeObj);
+
+      console.log(`🔍 Checking for reminders at ${currentTime} for ${reminderTime} on ${currentDay} (Asia/Kolkata)`);
+
+      // Only treat dates/times as IST when querying!
+      const todayIST = now.startOf('day').toJSDate(); // midnight IST
+
       const schedules = await StudySchedule.find({
         isActive: true,
         days: currentDay,
         studyTime: reminderTime,
         $or: [
           { reminderSent: null },
-          { 
-            reminderSent: { 
-              $lt: new Date(now.toDateString()) // Not sent today
-            }
-          }
+          { reminderSent: { $lt: todayIST } }
         ]
       }).populate('userId', 'name email isActive');
 
@@ -75,10 +69,9 @@ class CronService {
           );
 
           if (emailResult.success) {
-            // Update reminder sent timestamp
-            schedule.reminderSent = now;
+            // Save reminderSent as current IST time
+            schedule.reminderSent = now.toJSDate();
             await schedule.save();
-            
             console.log(`✅ Reminder sent for: ${schedule.studyTopic} to ${schedule.userId.email}`);
           } else {
             console.error(`❌ Failed to send reminder for: ${schedule.studyTopic} to ${schedule.userId.email}`);
@@ -92,29 +85,29 @@ class CronService {
 
   async cleanupOldReminders() {
     try {
-      const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
-      
+      // Use IST for date math!
+      const istNow = DateTime.now().setZone('Asia/Kolkata');
+      const thirtyDaysAgo = istNow.minus({ days: 30 }).toJSDate();
+
       const result = await StudySchedule.updateMany(
-        { 
-          reminderSent: { $lt: thirtyDaysAgo },
-          isActive: false 
-        },
+        { reminderSent: { $lt: thirtyDaysAgo }, isActive: false },
         { $unset: { reminderSent: 1 } }
       );
-
       console.log(`🧹 Cleaned up ${result.modifiedCount} old reminder records`);
     } catch (error) {
       console.error('❌ Error in cleanup cron job:', error.message);
     }
   }
 
-  getCurrentDayName() {
+  // Accepts a luxon DateTime
+  getCurrentDayName(dt = DateTime.now().setZone('Asia/Kolkata')) {
     const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
-    return days[new Date().getDay()];
+    return days[dt.weekday % 7]; // luxon: 1=Mon,...7=Sun
   }
 
-  formatTime(date) {
-    return `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
+  // Accepts a luxon DateTime
+  formatTime(dt) {
+    return dt.toFormat('HH:mm');
   }
 
   stop() {
