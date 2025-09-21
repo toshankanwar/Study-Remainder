@@ -69,7 +69,7 @@ export default function StudyScheduleForm({
           onScheduleCreated(response.data.data!.schedule);
         }
       }
-    } catch (error: any) {
+    } catch (error) {
       console.error('Error saving schedule:', error);
       const message = error.response?.data?.message || 'Failed to save schedule';
       toast.error(message);
