@@ -8,7 +8,7 @@ export function isTokenExpired(token: string): boolean {
   }
 }
 
-export function getTokenPayload(token: string): any {
+export function getTokenPayload(token: string){
   try {
     return JSON.parse(atob(token.split('.')[1]));
   } catch {
