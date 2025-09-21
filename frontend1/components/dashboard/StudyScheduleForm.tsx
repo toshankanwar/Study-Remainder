@@ -135,7 +135,7 @@ export default function StudyScheduleForm({
             <p className="mt-1 text-sm text-red-600">{errors.studyTime.message}</p>
           )}
           <p className="mt-1 text-xs text-gray-500">
-            💡 You'll receive a reminder 10 minutes before this time
+            💡 You will receive a reminder 10 minutes before this time
           </p>
         </div>
 
