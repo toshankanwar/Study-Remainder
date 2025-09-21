@@ -88,7 +88,7 @@ export default function DashboardPage() {
           <StatsCards schedules={schedules} />
         </div>
 
-        {/* Action Button */}
+        {/* Action  */}
         <div className="mb-6">
           <button
             onClick={() => {
