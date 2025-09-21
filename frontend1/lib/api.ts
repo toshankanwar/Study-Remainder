@@ -108,7 +108,7 @@ export const studyAPI = {
   delete: (id: string): Promise<AxiosResponse<ApiResponse<null>>> =>
     api.delete(`/study-schedules/${id}`),
   toggle: (id: string): Promise<AxiosResponse<ApiResponse<{ schedule: StudySchedule }>>> =>
-    api.patch(`/study-schedules/${id}`/toggle),
+    api.patch(`/study-schedules/${id}/toggle`),
 };
 
 // Health check API
