@@ -16,7 +16,7 @@ export function getTokenPayload(token: string): any {
   }
 }
 
-export function formatAuthError(error: any): string {
+export function formatAuthError(error): string {
   if (error.response?.data?.message) {
     return error.response.data.message;
   }
