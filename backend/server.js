@@ -34,10 +34,8 @@ const limiter = rateLimit({
 app.use(limiter);
 
 // CORS configuration
-app.use(cors({
-  origin: process.env.FRONTEND_URL || 'https://quite-hours-scheduler-iota.vercel.app/',
-  credentials: true,
-}));
+app.use(cors({ origin: true, credentials: true }));
+
 
 // Body parser middleware
 app.use(express.json({ limit: '10mb' }));
