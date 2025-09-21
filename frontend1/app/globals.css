@@ -1,0 +1,114 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary-50: #eff6ff;
+  --color-primary-100: #dbeafe;
+  --color-primary-200: #bfdbfe;
+  --color-primary-300: #93c5fd;
+  --color-primary-400: #60a5fa;
+  --color-primary-500: #3b82f6;
+  --color-primary-600: #2563eb;
+  --color-primary-700: #1d4ed8;
+  --color-primary-800: #1e40af;
+  --color-primary-900: #1e3a8a;
+  --color-primary-950: #172554;
+  
+  --color-background: #ffffff;
+  --color-foreground: #0f172a;
+  --color-border: #e2e8f0;
+  --color-muted: #f8fafc;
+  --color-muted-foreground: #64748b;
+}
+
+@variant dark {
+  @theme {
+    --color-background: #0f172a;
+    --color-foreground: #f1f5f9;
+    --color-border: #334155;
+    --color-muted: #1e293b;
+    --color-muted-foreground: #94a3b8;
+  }
+}
+
+@layer base {
+  * {
+    border-color: hsl(var(--color-border));
+  }
+  
+  body {
+    background-color: hsl(var(--color-background));
+    color: hsl(var(--color-foreground));
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: 600;
+    line-height: 1.25;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply inline-flex items-center justify-center rounded-lg px-4 py-2 text-sm font-medium text-white shadow-sm transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed;
+    background-color: hsl(var(--color-primary-600));
+  }
+  
+  .btn-primary:hover:not(:disabled) {
+    background-color: hsl(var(--color-primary-700));
+  }
+  
+  .btn-primary:focus {
+    --tw-ring-color: hsl(var(--color-primary-500));
+  }
+  
+  .btn-secondary {
+    @apply inline-flex items-center justify-center rounded-lg px-4 py-2 text-sm font-medium shadow-sm transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed;
+    background-color: hsl(var(--color-background));
+    color: hsl(var(--color-foreground));
+    border: 1px solid hsl(var(--color-border));
+  }
+  
+  .btn-secondary:hover:not(:disabled) {
+    background-color: hsl(var(--color-muted));
+  }
+  
+  .btn-secondary:focus {
+    --tw-ring-color: hsl(var(--color-primary-500));
+  }
+  
+  .input-field {
+    @apply block w-full rounded-lg px-3 py-2 text-sm shadow-sm transition-colors duration-200 focus:outline-none focus:ring-1;
+    background-color: hsl(var(--color-background));
+    color: hsl(var(--color-foreground));
+    border: 1px solid hsl(var(--color-border));
+  }
+  
+  .input-field::placeholder {
+    color: hsl(var(--color-muted-foreground));
+  }
+  
+  .input-field:focus {
+    border-color: hsl(var(--color-primary-500));
+    --tw-ring-color: hsl(var(--color-primary-500));
+  }
+  
+  .card {
+    @apply rounded-xl p-6 shadow-sm;
+    background-color: hsl(var(--color-background));
+    border: 1px solid hsl(var(--color-border));
+  }
+  
+  .text-muted {
+    color: hsl(var(--color-muted-foreground));
+  }
+  
+  .bg-muted {
+    background-color: hsl(var(--color-muted));
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
