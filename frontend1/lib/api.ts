@@ -84,7 +84,7 @@ export const authAPI = {
 export const studyAPI = {
   create: (data: Partial<StudySchedule>): Promise<AxiosResponse<ApiResponse<{ schedule: StudySchedule }>>> =>
     api.post('/study-schedules', data),
-  getAll: (params): Promise<AxiosResponse<ApiResponse<{ schedules: StudySchedule[]; pagination: any }>>> =>
+  getAll: (params): Promise<AxiosResponse<ApiResponse<{ schedules: StudySchedule[]; pagination }>>> =>
     api.get('/study-schedules', { params }),
   getById: (id: string): Promise<AxiosResponse<ApiResponse<{ schedule: StudySchedule }>>> =>
     api.get(`/study-schedules/${id}`),
