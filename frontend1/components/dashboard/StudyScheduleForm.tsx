@@ -1,7 +1,8 @@
+// components/dashboard/StudyScheduleForm.tsx
 'use client';
 
 import { useForm } from 'react-hook-form';
-import { studyAPI, StudySchedule } from '@/lib/api';
+import { studyAPI, StudySchedule, handleApiError } from '@/lib/api';
 import { Clock, BookOpen, Calendar, FileText } from 'lucide-react';
 import toast from 'react-hot-toast';
 
@@ -71,7 +72,7 @@ export default function StudyScheduleForm({
       }
     } catch (error) {
       console.error('Error saving schedule:', error);
-      const message = error.response?.data?.message || 'Failed to save schedule';
+      const message = handleApiError(error);
       toast.error(message);
     }
   };
@@ -134,7 +135,7 @@ export default function StudyScheduleForm({
             <p className="mt-1 text-sm text-red-600">{errors.studyTime.message}</p>
           )}
           <p className="mt-1 text-xs text-gray-500">
-            💡 You&apos;ll receive a reminder 10 minutes before this time
+            💡 You'll receive a reminder 10 minutes before this time
           </p>
         </div>
 
