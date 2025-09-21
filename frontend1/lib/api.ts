@@ -1,7 +1,7 @@
 // lib/api.ts
 import axios, { AxiosResponse } from 'axios';
 
-const API_BASE_URL = "process.env.NEXT_PUBLIC_API_URL" || 'https://study-remainder-check.onrender.com/api';
+const API_BASE_URL = 'https://study-remainder-check.onrender.com/api';
 
 // Create axios instance
 const api = axios.create({
